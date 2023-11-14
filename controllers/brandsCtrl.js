@@ -1,7 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Brand = require("../model/Brand.js");
 
-
 // @desc    Create new Brand
 // @route   POST /api/v1/brands
 // @access  Private/Admin
