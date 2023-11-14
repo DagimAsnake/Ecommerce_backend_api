@@ -144,7 +144,7 @@ module.exports.getProductsCtrl = asyncHandler(async (req, res) => {
     };
   }
      //await the query
-    const products = await productQuery;
+    const products = await productQuery.populate("reviews");;
     res.json({
       status: "success",
       total,
@@ -161,7 +161,13 @@ module.exports.getProductsCtrl = asyncHandler(async (req, res) => {
 // @access  Public
 
 module.exports.getProductCtrl = asyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id)
+    const product = await Product.findById(req.params.id).populate({
+      path: "reviews",
+      populate: {
+        path: "user",
+        select: "fullname",
+      },
+    });
     if (!product) {
       throw new Error("Product not found");
     }
