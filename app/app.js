@@ -8,6 +8,7 @@ const userRoutes = require("../routes/usersRoute.js");
 const { globalErrhandler, notFound } = require("../middlewares/globalErrHandler.js");
 const productsRouter = require("../routes/productsRoute.js");
 const categoriesRouter = require("../routes/categoriesRoute.js");
+const brandsRouter = require("../routes/brandsRoute.js");
 
 //db connect
 dbConnect();
@@ -22,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/users/", userRoutes);
 app.use("/products/", productsRouter);
 app.use("/categories/", categoriesRouter);
+app.use("/brands/", brandsRouter);
 
 //err middleware
 app.use(notFound);
