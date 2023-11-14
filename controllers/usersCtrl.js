@@ -2,8 +2,6 @@ const User = require("../model/User.js");
 const bcrypt = require("bcryptjs");
 const generateToken = require("../utils/generateToken.js");
 const asyncHandler = require("express-async-handler");
-const { getTokenFromHeader } = require("../utils/getTokenFromHeader.js");
-const { verifyToken } = require ("../utils/verifyToken.js");
 
 // @desc    Register user
 // @route   POST /users/register
