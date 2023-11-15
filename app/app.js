@@ -11,6 +11,7 @@ const categoriesRouter = require("../routes/categoriesRoute.js");
 const brandsRouter = require("../routes/brandsRoute.js");
 const colorRouter = require("../routes/colorRoute.js");
 const reviewRouter = require("../routes/reviewRoute.js");
+const orderRouter = require("../routes/orderRoute.js");
 
 //db connect
 dbConnect();
@@ -28,6 +29,7 @@ app.use("/categories/", categoriesRouter);
 app.use("/brands/", brandsRouter);
 app.use("/colors/", colorRouter);
 app.use("/reviews/", reviewRouter);
+app.use("/orders/", orderRouter);
 
 //err middleware
 app.use(notFound);
