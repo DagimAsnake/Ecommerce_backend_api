@@ -2,10 +2,14 @@ const asyncHandler = require("express-async-handler");
 const Product = require("../model/Product.js");
 const User = require("../model/User.js");
 const Order = require("../model/Order.js");
+const Stripe = require("stripe")
 
 //@desc create orders
 //@route POST /api/v1/orders
 //@access private
+
+//stripe instance
+const stripe = new Stripe(process.env.STRIPE_KEY);
 
 module.exports.createOrderCtrl = asyncHandler(async (req, res) => {
     const { orderItems, shippingAddress, totalPrice } = req.body;
@@ -45,11 +49,31 @@ module.exports.createOrderCtrl = asyncHandler(async (req, res) => {
   //push order into user
   user.orders.push(order?._id);
   await user.save();
-   
-  res.json({
-    success: true,
-    message: "Order Created",
-    order,
-    user
+
+    //make payment (stripe)
+  //convert order items to have same structure that stripe need
+  const convertedOrders = orderItems.map((item) => {
+    return {
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: item?.name,
+          description: item?.description,
+        },
+        unit_amount: item?.price * 100,
+      },
+      quantity: item?.qty,
+    };
   });
+  const session = await stripe.checkout.sessions.create({
+    line_items: convertedOrders,
+    metadata: {
+      orderId: JSON.stringify(order?._id),
+    },
+    mode: "payment",
+    success_url: "http://localhost:3000/success",
+    cancel_url: "http://localhost:3000/cancel",
+  });
+
+  res.send({ url: session.url });
 });
