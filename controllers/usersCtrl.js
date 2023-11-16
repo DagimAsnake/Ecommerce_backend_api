@@ -60,12 +60,12 @@ module.exports.loginUserCtrl = asyncHandler(async (req, res) => {
 
 module.exports.getUserProfileCtrl = asyncHandler(async (req, res) => {
     //find the user
-    const user = await User.findById(req.userAuthId)
-    res.json({
-      status: "success",
-      message: "User profile fetched successfully",
-      user,
-    });
+  const user = await User.findById(req.userAuthId).populate("orders");
+  res.json({
+    status: "success",
+    message: "User profile fetched successfully",
+    user,
+  });
   });
 
 
