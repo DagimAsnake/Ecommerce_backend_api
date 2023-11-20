@@ -1,4 +1,5 @@
 const express = require("express");
+const upload = require("../config/fileUpload.js");
 const {
     createProductCtrl,
     getProductsCtrl,
@@ -10,7 +11,7 @@ const { isLoggedIn } = require("../middlewares/isLoggedIn.js");
 
 const productsRouter = express.Router();
 
-productsRouter.post("/", isLoggedIn, createProductCtrl);
+productsRouter.post("/", isLoggedIn, upload.array("files"), createProductCtrl);
 productsRouter.get("/", getProductsCtrl);
 productsRouter.get("/:id", getProductCtrl);
 productsRouter.put("/:id", isLoggedIn, updateProductCtrl);

@@ -1,4 +1,5 @@
 const express = require("express");
+const categoryFileUpload = require("../config/categoryUpload.js");
 const {
     createCategoryCtrl,
     getAllCategoriesCtrl,
@@ -10,7 +11,7 @@ const { isLoggedIn } = require("../middlewares/isLoggedIn.js");
 
 const categoriesRouter = express.Router();
 
-categoriesRouter.post("/", isLoggedIn, createCategoryCtrl);
+categoriesRouter.post("/", isLoggedIn,  categoryFileUpload.single("file"), createCategoryCtrl);
 categoriesRouter.get("/", getAllCategoriesCtrl);
 categoriesRouter.get("/:id", getSingleCategoryCtrl);
 categoriesRouter.delete("/:id", deleteCategoryCtrl);

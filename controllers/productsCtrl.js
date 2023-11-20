@@ -7,8 +7,10 @@ const Brand = require("../model/Brand.js");
 // @route   POST /api/v1/products
 // @access  Private/Admin
 module.exports.createProductCtrl = asyncHandler(async (req, res) => {
-    console.log(req.body);
     const { name, description, category, sizes, colors, price, totalQty, brand } = req.body;
+
+    const convertedImgs = req.files.map((file) => file?.path);
+
     //Product exists
     const productExists = await Product.findOne({ name });
     if (productExists) {
@@ -43,7 +45,8 @@ module.exports.createProductCtrl = asyncHandler(async (req, res) => {
     user: req.userAuthId,
     price,
     totalQty,
-    brand
+    brand,
+    images: convertedImgs,
   });
    //push the product into category
    categoryFound.products.push(product._id);
