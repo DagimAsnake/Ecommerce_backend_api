@@ -3,6 +3,7 @@ const Product = require("../model/Product.js");
 const User = require("../model/User.js");
 const Order = require("../model/Order.js");
 const Stripe = require("stripe")
+const Coupon = require("../model/Coupon.js");
 
 //@desc create orders
 //@route POST /api/v1/orders
@@ -12,6 +13,22 @@ const Stripe = require("stripe")
 const stripe = new Stripe(process.env.STRIPE_KEY);
 
 module.exports.createOrderCtrl = asyncHandler(async (req, res) => {
+    // //get the coupon
+  const { coupon } = req?.query;
+
+  const couponFound = await Coupon.findOne({
+    code: coupon,
+  });
+  if (couponFound?.isExpired) {
+    throw new Error("Coupon has expired");
+  }
+  if (!couponFound) {
+    throw new Error("Coupon does exists");
+  }
+
+  //get discount
+  const discount = couponFound?.discount / 100;
+
     const { orderItems, shippingAddress, totalPrice } = req.body;
     //Find the user
     const user = await User.findById(req.userAuthId);
@@ -29,8 +46,8 @@ module.exports.createOrderCtrl = asyncHandler(async (req, res) => {
     user: user?._id,
     orderItems,
     shippingAddress,
-    // totalPrice: couponFound ? totalPrice - totalPrice * discount : totalPrice,
-    totalPrice,
+    totalPrice: couponFound ? totalPrice - totalPrice * discount : totalPrice,
+    // totalPrice,
   });
 
   //Update the product qty

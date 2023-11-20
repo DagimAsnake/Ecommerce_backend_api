@@ -14,6 +14,7 @@ const colorRouter = require("../routes/colorRoute.js");
 const reviewRouter = require("../routes/reviewRoute.js");
 const orderRouter = require("../routes/orderRoute.js");
 const Order = require("../model/Order.js");
+const couponsRouter = require("../routes/couponRoute.js");
 
 //db connect
 dbConnect();
@@ -95,6 +96,7 @@ app.use("/brands/", brandsRouter);
 app.use("/colors/", colorRouter);
 app.use("/reviews/", reviewRouter);
 app.use("/orders/", orderRouter);
+app.use("/coupons/", couponsRouter);
 
 //err middleware
 app.use(notFound);
